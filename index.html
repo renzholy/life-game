@@ -16,7 +16,7 @@
 
     const array = []
     for (let i = 0; i < WIDTH * HEIGHT; i++) {
-      array.push(Math.random() > 0.9 ? 1 : 0)
+      array.push(Math.random() > 0.88 ? 1 : 0)
     }
 
     const gpu = new GPU()
@@ -33,6 +33,10 @@
         + (a[this.thread.y + 1][this.thread.x - 1])
         + (a[this.thread.y + 1][this.thread.x])
         + (a[this.thread.y + 1][this.thread.x + 1])
+      // variation
+      if (Math.random() > 0.9998) {
+        return Math.round(Math.random())
+      }
       if (a[this.thread.y][this.thread.x] === 1) {
         if (around === 2 || around === 3) {
           return 1
