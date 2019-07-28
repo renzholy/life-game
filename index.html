@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="./test.css">
+  <script type="module">
+
+    import { SIZE, getPoint, setPoint, traverse, around } from './earth.js'
+
+    function random(range) {
+      return Math.floor(Math.random() * range)
+    }
+
+    for (let a = 0; a < 400; a++) {
+      setPoint(random(window.innerWidth / SIZE), random(window.innerHeight / SIZE), true)
+    }
+
+    function drawPoint(x, y, color) {
+      const div = document.createElement('div')
+      div.style.left = `${x * SIZE}px`
+      div.style.top = `${y * SIZE}px`
+      div.style.width = `${SIZE}px`
+      div.style.height = `${SIZE}px`
+      div.style.position = 'fixed'
+      div.style.background = color
+      document.body.appendChild(div)
+    }
+
+    setInterval(() => {
+      traverse((x, y, value, set) => {
+        const a = around(x, y)
+        let newValue
+        if (value) {
+          if (a < 2) {
+            newValue = false
+          } else if (2 <= a && a <= 3) {
+            newValue = value
+          } else {
+            newValue = false
+          }
+        } else {
+          if (a === 3) {
+            newValue = true
+          }
+        }
+        drawPoint(x, y, value ? 'black' : 'white')
+        set(x, y, newValue)
+      })
+    })
+
+  </script>
+</head>
+
+<body>
+
+</body>
+
+</html>
