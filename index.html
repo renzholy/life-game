@@ -24,7 +24,7 @@
       return a[this.thread.y][this.thread.x]
     }).setOutput([WIDTH, HEIGHT])
 
-    const multiply = gpu.createKernel(function (a) {
+    const reproduction = gpu.createKernel(function (a) {
       const around = (a[this.thread.y - 1][this.thread.x - 1])
         + (a[this.thread.y - 1][this.thread.x])
         + (a[this.thread.y - 1][this.thread.x + 1])
@@ -45,16 +45,18 @@
       return 0
     }).setOutput([WIDTH, HEIGHT])
 
-    function drawPoint(x, y, value) {
-      const existed = document.getElementById(`${x}-${y}`)
-      if (existed && value) {
-        return
+    const diff = gpu.createKernel(function (a, b) {
+      if (a[this.thread.y][this.thread.x] === b[this.thread.y][this.thread.x]) {
+        return 0
       }
-      if (existed && !value) {
-        document.body.removeChild(existed)
-        return
+      if (b[this.thread.y][this.thread.x] === 1) {
+        return 1
       }
-      if (!existed && value) {
+      return -1
+    }).setOutput([WIDTH, HEIGHT])
+
+    function drawPoint(x, y, d) {
+      if (d === 1) {
         const div = document.createElement('div')
         div.id = `${x}-${y}`
         div.className = 'cell'
@@ -63,16 +65,25 @@
         document.body.appendChild(div)
         return
       }
+      if (d === -1) {
+        const existed = document.getElementById(`${x}-${y}`)
+        if (existed) {
+          document.body.removeChild(existed)
+        }
+        return
+      }
     }
 
-    function nextGeneration(cc) {
+    function nextGeneration(c) {
+      const cc = reproduction(c)
+      const d = diff(c, cc)
       for (let x = 0; x < WIDTH; x++) {
         for (let y = 0; y < HEIGHT; y++) {
-          drawPoint(x, y, cc[y][x])
+          drawPoint(x, y, d[y][x])
         }
       }
       setTimeout(() => {
-        nextGeneration(multiply(cc))
+        nextGeneration(cc)
       }, 10)
     }
 
