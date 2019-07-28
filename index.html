@@ -25,18 +25,47 @@
     }).setOutput([WIDTH, HEIGHT])
 
     const reproduction = gpu.createKernel(function (a) {
-      const around = (a[this.thread.y - 1][this.thread.x - 1])
-        + (a[this.thread.y - 1][this.thread.x])
-        + (a[this.thread.y - 1][this.thread.x + 1])
-        + (a[this.thread.y][this.thread.x - 1])
-        + (a[this.thread.y][this.thread.x + 1])
-        + (a[this.thread.y + 1][this.thread.x - 1])
-        + (a[this.thread.y + 1][this.thread.x])
-        + (a[this.thread.y + 1][this.thread.x + 1])
+      const x = this.thread.x
+      const y = this.thread.y
+      let around = 0
+
+      function checkBoundary(y, x) {
+        if (x >= 0 && x <= this.constants.WIDTH && y >= 0 && y <= this.constants.HEIGHT) {
+          return 1
+        }
+        return 0
+      }
+
+      if (checkBoundary(y - 1, x - 1) === 1 && a[y - 1][x - 1] === 1) {
+        around += 1
+      }
+      if (checkBoundary(y - 1, x) === 1 && a[y - 1][x] === 1) {
+        around += 1
+      }
+      if (checkBoundary(y - 1, x + 1) === 1 && a[y - 1][x + 1] === 1) {
+        around += 1
+      }
+      if (checkBoundary(y, x - 1) === 1 && a[y][x - 1] === 1) {
+        around += 1
+      }
+      if (checkBoundary(y, x + 1) === 1 && a[y][x + 1] === 1) {
+        around += 1
+      }
+      if (checkBoundary(y + 1, x - 1) === 1 && a[y + 1][x - 1] === 1) {
+        around += 1
+      }
+      if (checkBoundary(y + 1, x) === 1 && a[y + 1][x] === 1) {
+        around += 1
+      }
+      if (checkBoundary(y + 1, x + 1) === 1 && a[y + 1][x + 1] === 1) {
+        around += 1
+      }
+
       // variation
       if (Math.random() > 0.9998) {
         return Math.round(Math.random())
       }
+
       if (a[this.thread.y][this.thread.x] === 1) {
         if (around === 2 || around === 3) {
           return 1
@@ -47,7 +76,7 @@
         return 1
       }
       return 0
-    }).setOutput([WIDTH, HEIGHT])
+    }).setOutput([WIDTH, HEIGHT]).setConstants({ WIDTH, HEIGHT })
 
     const diff = gpu.createKernel(function (a, b) {
       if (a[this.thread.y][this.thread.x] === b[this.thread.y][this.thread.x]) {
