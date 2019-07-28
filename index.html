@@ -32,7 +32,7 @@
     const reproduction = gpu.createKernel(function (a) {
       // variation
       if (Math.random() < this.constants.RADIATION / this.constants.WIDTH / this.constants.HEIGHT) {
-        return Math.round(Math.random())
+        return Math.round(Math.random() * 2)
       }
 
       const x = this.thread.x
