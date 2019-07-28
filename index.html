@@ -24,7 +24,7 @@
       return a[this.thread.y][this.thread.x]
     }).setOutput([WIDTH, HEIGHT])
 
-    const multiplyMatrix = gpu.createKernel(function (a) {
+    const multiply = gpu.createKernel(function (a) {
       const around = (a[this.thread.y - 1][this.thread.x - 1])
         + (a[this.thread.y - 1][this.thread.x])
         + (a[this.thread.y - 1][this.thread.x + 1])
@@ -65,18 +65,18 @@
       }
     }
 
-    function aaa(cc) {
+    function nextGeneration(cc) {
       for (let x = 0; x < WIDTH; x++) {
         for (let y = 0; y < HEIGHT; y++) {
           drawPoint(x, y, cc[y][x])
         }
       }
       setTimeout(() => {
-        aaa(multiplyMatrix(cc))
+        nextGeneration(multiply(cc))
       }, 10)
     }
 
-    aaa(prepare(GPU.input(array, [WIDTH, HEIGHT])))
+    nextGeneration(prepare(GPU.input(array, [WIDTH, HEIGHT])))
   </script>
 </head>
 
