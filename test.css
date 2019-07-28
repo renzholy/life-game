@@ -10,6 +10,13 @@ html, body {
   position: relative;
 }
 
+div.cell {
+  background-color: black;
+  position: fixed;
+  width: 5px;
+  height: 5px;
+}
+
 ::-webkit-scrollbar {
   display: none;
 }
