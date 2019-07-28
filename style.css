@@ -5,10 +5,10 @@ html, body {
 }
 
 div.cell {
-  background-color: #0d3300;
+  background-color: #035c12;
   position: fixed;
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar {
