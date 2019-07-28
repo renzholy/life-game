@@ -10,7 +10,7 @@
   <script src="https://unpkg.com/gpu.js@2.0.0-rc.23/dist/gpu-browser.min.js"></script>
   <script type="module">
 
-    const SIZE = 5
+    const SIZE = 8
     const WIDTH = Math.ceil(window.innerWidth / SIZE)
     const HEIGHT = Math.ceil(window.innerHeight / SIZE)
 
@@ -84,7 +84,7 @@
       }
       setTimeout(() => {
         nextGeneration(cc)
-      }, 10)
+      }, 1000 / 60)
     }
 
     nextGeneration(prepare(GPU.input(array, [WIDTH, HEIGHT])))
