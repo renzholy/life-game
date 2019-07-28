@@ -16,10 +16,14 @@
 
     const array = []
     for (let i = 0; i < WIDTH * HEIGHT; i++) {
-      array.push(1)
+      array.push(Math.random() > 0.9 ? 1 : 0)
     }
 
     const gpu = new GPU()
+    const prepare = gpu.createKernel(function (a) {
+      return a[this.thread.y][this.thread.x]
+    }).setOutput([WIDTH, HEIGHT])
+
     const multiplyMatrix = gpu.createKernel(function (a) {
       const around = (a[this.thread.y - 1][this.thread.x - 1])
         + (a[this.thread.y - 1][this.thread.x])
@@ -42,19 +46,26 @@
     }).setOutput([WIDTH, HEIGHT])
 
     function drawPoint(x, y, value) {
-      if (!value) {
+      const existed = document.getElementById(`${x}-${y}`)
+      if (existed && value) {
         return
       }
-      const div = document.createElement('div')
-      div.id = `${x}-${y}`
-      div.className = 'cell'
-      div.style.left = `${x * SIZE}px`
-      div.style.top = `${y * SIZE}px`
-      document.body.appendChild(div)
+      if (existed && !value) {
+        document.body.removeChild(existed)
+        return
+      }
+      if (!existed && value) {
+        const div = document.createElement('div')
+        div.id = `${x}-${y}`
+        div.className = 'cell'
+        div.style.left = `${x * SIZE}px`
+        div.style.top = `${y * SIZE}px`
+        document.body.appendChild(div)
+        return
+      }
     }
 
     function aaa(cc) {
-      document.body.innerHTML = ''
       for (let x = 0; x < WIDTH; x++) {
         for (let y = 0; y < HEIGHT; y++) {
           drawPoint(x, y, cc[y][x])
@@ -62,10 +73,10 @@
       }
       setTimeout(() => {
         aaa(multiplyMatrix(cc))
-      }, 50)
+      }, 10)
     }
 
-    aaa(GPU.input(new Float32Array(array), [WIDTH, HEIGHT]).value)
+    aaa(prepare(GPU.input(array, [WIDTH, HEIGHT])))
   </script>
 </head>
 
