@@ -99,7 +99,20 @@ onmessage = (e) => {
   function nextGeneration(c) {
     const cc = reproduction(c)
     const d = diff(c, cc)
-    postMessage(d)
+    setTimeout(() => {
+      const result = []
+      for (let y = 0; y < HEIGHT; y++) {
+        for (let x = 0; x < WIDTH; x++) {
+          if (d[y][x] === 1) {
+            result.push({ x, y, d: 1 })
+          }
+          if (d[y][x] === -1) {
+            result.push({ x, y, d: -1 })
+          }
+        }
+      }
+      postMessage(result)
+    })
     setTimeout(() => {
       nextGeneration(cc)
     }, 1000 / FPS)

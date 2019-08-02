@@ -37,17 +37,15 @@
     worker.postMessage({ WIDTH, HEIGHT })
 
     worker.onmessage = (e) => {
+      const result = e.data
       const add = []
       const remove = []
-      const d = e.data
-      for (let y = 0; y < HEIGHT; y++) {
-        for (let x = 0; x < WIDTH; x++) {
-          drawPoint(x, y, d[y][x], (el) => {
-            add.push(el)
-          }, (el) => {
-            remove.push(el)
-          })
-        }
+      for (const { x, y, d } of result) {
+        drawPoint(x, y, d, (el) => {
+          add.push(el)
+        }, (el) => {
+          remove.push(el)
+        })
       }
       const fragment = document.createDocumentFragment()
       for (const a of add) {
