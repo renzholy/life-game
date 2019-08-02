@@ -81,7 +81,13 @@
         return 1
       }
       return 0
-    }).setOutput([WIDTH, HEIGHT]).setConstants({ WIDTH, HEIGHT, RADIATION })
+    })
+      .setPipeline(true)
+      .setImmutable(true)
+      .setOptimizeFloatMemory(true)
+      .setStrictIntegers(true)
+      .setOutput([WIDTH, HEIGHT])
+      .setConstants({ WIDTH, HEIGHT, RADIATION })
 
     const diff = gpu.createKernel(function (a, b) {
       const x = this.thread.x
@@ -94,7 +100,11 @@
         return 1
       }
       return -1
-    }).setOutput([WIDTH, HEIGHT])
+    })
+      .setImmutable(true)
+      .setOptimizeFloatMemory(true)
+      .setStrictIntegers(true)
+      .setOutput([WIDTH, HEIGHT])
 
     function drawPoint(x, y, d, onAdd, onRemove) {
       if (d === 1) {
