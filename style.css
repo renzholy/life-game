@@ -5,7 +5,9 @@ html, body {
 
 canvas {
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - constant(safe-area-inset-bottom));
+  height: calc(100vh - env(safe-area-inset-bottom));
+  margin-bottom: -4px;
 }
 
 ::-webkit-scrollbar {
