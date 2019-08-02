@@ -3,11 +3,9 @@ html, body {
   padding: 0 !important;
 }
 
-div.cell {
-  background-color: #035c12;
-  position: fixed;
-  width: 4px;
-  height: 4px;
+canvas {
+  width: 100vw;
+  height: 100vh;
 }
 
 ::-webkit-scrollbar {

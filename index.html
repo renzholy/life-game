@@ -15,12 +15,17 @@
 
     const worker = new Worker('gpu-worker.js')
 
-    window.devicePixelRatio = 2
-    var canvas = document.getElementById('canvas')
-    var ctx = canvas.getContext('2d')
+    function setupCanvas(canvas) {
+      const dpr = window.devicePixelRatio || 1
+      const rect = canvas.getBoundingClientRect()
+      canvas.width = rect.width * dpr
+      canvas.height = rect.height * dpr
+      const ctx = canvas.getContext('2d')
+      ctx.scale(dpr, dpr)
+      return ctx
+    }
 
-    canvas.width = window.innerWidth
-    canvas.height = window.innerHeight
+    const ctx = setupCanvas(document.getElementById('canvas'))
 
     function drawPoint(x, y, d) {
       if (d === 1) {
