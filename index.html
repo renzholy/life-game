@@ -14,7 +14,7 @@
     const HEIGHT = Math.ceil(window.innerHeight / SIZE)
     const DENSITY = 0.12
     const RADIATION = 0.0001
-    const FPS = 60
+    const FPS = 30
     const DPR = window.devicePixelRatio || 1
 
     const worker = new Worker('gpu-worker.js')
@@ -34,7 +34,7 @@
       if (d === 1) {
         ctx.fillStyle = '#035C12'
       } else if (d === -1) {
-        ctx.fillStyle = '#FFFFFF'
+        ctx.fillStyle = '#F3F3F3'
       }
       ctx.fillRect(x * SIZE, y * SIZE, SIZE - 1 / DPR, SIZE - 1 / DPR)
     }
