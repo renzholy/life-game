@@ -96,20 +96,20 @@
       return -1
     }).setOutput([WIDTH, HEIGHT])
 
-    function drawPoint(x, y, d) {
+    function drawPoint(x, y, d, onAdd, onRemove) {
       if (d === 1) {
         const div = document.createElement('div')
         div.id = `${x}-${y}`
         div.className = 'cell'
         div.style.left = `${x * SIZE}px`
         div.style.top = `${y * SIZE}px`
-        document.body.appendChild(div)
+        onAdd(div)
         return
       }
       if (d === -1) {
         const existed = document.getElementById(`${x}-${y}`)
         if (existed) {
-          document.body.removeChild(existed)
+          onRemove(existed)
         }
         return
       }
@@ -118,10 +118,24 @@
     function nextGeneration(c) {
       const cc = reproduction(c)
       const d = diff(c, cc)
+      const add = []
+      const remove = []
       for (let x = 0; x < WIDTH; x++) {
         for (let y = 0; y < HEIGHT; y++) {
-          drawPoint(x, y, d[y][x])
+          drawPoint(x, y, d[y][x], (el) => {
+            add.push(el)
+          }, (el) => {
+            remove.push(el)
+          })
         }
+      }
+      const fragment = document.createDocumentFragment()
+      for (const a of add) {
+        fragment.appendChild(a)
+      }
+      document.body.appendChild(fragment)
+      for (const r of remove) {
+        document.body.removeChild(r)
       }
       setTimeout(() => {
         nextGeneration(cc)
