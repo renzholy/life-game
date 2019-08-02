@@ -5,7 +5,7 @@ onmessage = (e) => {
 
   const DENSITY = 0.12
   const RADIATION = 400
-  const FPS = 10
+  const FPS = 60
 
   // init
   const array = []

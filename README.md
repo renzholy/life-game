@@ -6,6 +6,6 @@ https://renzholy.github.io/life-game/
 
 ## Features
 
-- virtual dom, not canvas
+- web worker
 - gpu acceleration
 - random variation

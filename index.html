@@ -9,29 +9,26 @@
   <link rel="stylesheet" href="./style.css">
   <script type="module">
 
-    const SIZE = 5
+    const SIZE = 4
     const WIDTH = Math.ceil(window.innerWidth / SIZE)
     const HEIGHT = Math.ceil(window.innerHeight / SIZE)
 
     const worker = new Worker('gpu-worker.js')
 
-    function drawPoint(x, y, d, onAdd, onRemove) {
+    window.devicePixelRatio = 2
+    var canvas = document.getElementById('canvas')
+    var ctx = canvas.getContext('2d')
+
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+
+    function drawPoint(x, y, d) {
       if (d === 1) {
-        const div = document.createElement('div')
-        div.id = `${x}-${y}`
-        div.className = 'cell'
-        div.style.left = `${x * SIZE}px`
-        div.style.top = `${y * SIZE}px`
-        onAdd(div)
-        return
+        ctx.fillStyle = '#035C12'
+      } else if (d === -1) {
+        ctx.fillStyle = '#FFFFFF'
       }
-      if (d === -1) {
-        const existed = document.getElementById(`${x}-${y}`)
-        if (existed) {
-          onRemove(existed)
-        }
-        return
-      }
+      ctx.fillRect(x * SIZE, y * SIZE, SIZE - 1, SIZE - 1)
     }
 
     worker.postMessage({ WIDTH, HEIGHT })
@@ -41,11 +38,7 @@
       const add = []
       const remove = []
       for (const { x, y, d } of result) {
-        drawPoint(x, y, d, (el) => {
-          add.push(el)
-        }, (el) => {
-          remove.push(el)
-        })
+        drawPoint(x, y, d)
       }
       const fragment = document.createDocumentFragment()
       for (const a of add) {
@@ -60,6 +53,8 @@
   </script>
 </head>
 
-<body></body>
+<body>
+  <canvas id='canvas'></canvas>
+</body>
 
 </html>
