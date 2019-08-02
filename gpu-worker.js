@@ -1,13 +1,8 @@
 importScripts('https://unpkg.com/gpu.js@2.0.0-rc.23/dist/gpu-browser.min.js')
 
 onmessage = (e) => {
-  const { WIDTH, HEIGHT } = e.data
+  const { WIDTH, HEIGHT, DENSITY, RADIATION, FPS } = e.data
 
-  const DENSITY = 0.12
-  const RADIATION = 400
-  const FPS = 60
-
-  // init
   const array = []
   for (let i = 0; i < WIDTH * HEIGHT; i++) {
     array.push(Math.random() < DENSITY ? 1 : 0)
@@ -21,7 +16,7 @@ onmessage = (e) => {
 
   const reproduction = gpu.createKernel(function (a) {
     // variation
-    if (Math.random() < this.constants.RADIATION / this.constants.WIDTH / this.constants.HEIGHT) {
+    if (Math.random() < this.constants.RADIATION) {
       return Math.round(Math.random() * 2)
     }
 
