@@ -13,22 +13,22 @@
   <canvas id='canvas'></canvas>
   <script type="module">
 
-    const SIZE = 3
-    const WIDTH = Math.ceil(window.innerWidth / SIZE)
-    const HEIGHT = Math.ceil(window.innerHeight / SIZE)
+    const SIZE = 4
+    const DPR = window.devicePixelRatio || 1
+    const WIDTH = Math.ceil(window.innerWidth * DPR / SIZE)
+    const HEIGHT = Math.ceil(window.innerHeight * DPR / SIZE)
     const DENSITY = 0.12
     const RADIATION = 0.0001
     const FPS = 30
-    const DPR = window.devicePixelRatio || 1
 
     const worker = new Worker('gpu-worker.js')
 
     function setupCanvas(canvas) {
       const rect = canvas.getBoundingClientRect()
+      console.log(rect)
       canvas.width = rect.width * DPR
       canvas.height = rect.height * DPR
       const ctx = canvas.getContext('2d')
-      ctx.scale(DPR, DPR)
       return ctx
     }
 
@@ -40,7 +40,7 @@
       } else if (d === -1) {
         ctx.fillStyle = '#F3F3F3'
       }
-      ctx.fillRect(x * SIZE, y * SIZE, SIZE - 1 / DPR, SIZE - 1 / DPR)
+      ctx.fillRect(x * SIZE, y * SIZE, SIZE - 1, SIZE - 1)
     }
 
     worker.postMessage({ WIDTH, HEIGHT, DENSITY, RADIATION, FPS })
