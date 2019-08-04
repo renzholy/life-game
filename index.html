@@ -32,7 +32,11 @@
       return ctx
     }
 
-    const ctx = setupCanvas(document.getElementById('canvas'))
+    let ctx = setupCanvas(document.getElementById('canvas'))
+
+    window.onresize = () => {
+      let ctx = setupCanvas(document.getElementById('canvas'))
+    }
 
     function drawPoint(x, y, d) {
       if (d === 1) {
