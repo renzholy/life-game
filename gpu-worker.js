@@ -3,9 +3,11 @@ importScripts('https://unpkg.com/gpu.js@2.0.0-rc.23/dist/gpu-browser.min.js')
 onmessage = (e) => {
   const { WIDTH, HEIGHT, DENSITY, RADIATION, FPS } = e.data
 
-  const array = []
+  const initial = []
+  const empty = []
   for (let i = 0; i < WIDTH * HEIGHT; i++) {
-    array.push(Math.random() < DENSITY ? 1 : 0)
+    initial.push(Math.random() < DENSITY ? 1 : 0)
+    empty.push(0)
   }
 
   const gpu = new GPU()
@@ -91,28 +93,35 @@ onmessage = (e) => {
     .setStrictIntegers(true)
     .setOutput([WIDTH, HEIGHT])
 
+  function getResult(d) {
+    const result = []
+    for (let y = 0; y < HEIGHT; y++) {
+      for (let x = 0; x < WIDTH; x++) {
+        if (d[y][x] === 1) {
+          result.push({ x, y, d: 1 })
+        }
+        if (d[y][x] === -1) {
+          result.push({ x, y, d: -1 })
+        }
+      }
+    }
+    return result
+  }
+
   function nextGeneration(c) {
     const cc = reproduction(c)
     const d = diff(c, cc)
     setTimeout(() => {
-      const result = []
-      for (let y = 0; y < HEIGHT; y++) {
-        for (let x = 0; x < WIDTH; x++) {
-          if (d[y][x] === 1) {
-            result.push({ x, y, d: 1 })
-          }
-          if (d[y][x] === -1) {
-            result.push({ x, y, d: -1 })
-          }
-        }
-      }
-      postMessage(result)
+      postMessage(getResult(d))
     })
     setTimeout(() => {
       nextGeneration(cc)
     }, 1000 / FPS)
   }
 
-  nextGeneration(prepare(GPU.input(array, [WIDTH, HEIGHT])))
-
+  const initialData = prepare(GPU.input(initial, [WIDTH, HEIGHT]))
+  const emptyData = prepare(GPU.input(empty, [WIDTH, HEIGHT]))
+  const d = diff(emptyData, initialData)
+  postMessage(getResult(d))
+  nextGeneration(initialData)
 }
