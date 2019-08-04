@@ -1,4 +1,4 @@
-importScripts('https://unpkg.com/gpu.js@2.0.0-rc.23/dist/gpu-browser.min.js')
+importScripts('./gpu-browser.min.js')
 
 onmessage = (e) => {
   const { WIDTH, HEIGHT, DENSITY, RADIATION, FPS } = e.data

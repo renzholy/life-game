@@ -1,0 +1,10 @@
+{
+  "manifest_version": 2,
+  "name": "Game of Life with Variation",
+  "version": "0.0.1",
+  "homepage_url": "https://github.com/RenzHoly/life-game",
+  "offline_enabled": true,
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  }
+}
