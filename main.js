@@ -19,7 +19,7 @@ function setupCanvas(canvas) {
 let ctx = setupCanvas(document.getElementById('canvas'))
 
 window.onresize = () => {
-  let ctx = setupCanvas(document.getElementById('canvas'))
+  ctx = setupCanvas(document.getElementById('canvas'))
 }
 
 function drawPoint(x, y, d) {
