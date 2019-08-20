@@ -11,6 +11,10 @@
 - gpu acceleration
 - random variation
 
+## Todo
+
+- wasm version
+
 ## About
 
 - [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life)
